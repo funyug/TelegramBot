@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Telegram\Bot\Api;
 
 class TelegramController extends Controller
@@ -29,7 +30,11 @@ class TelegramController extends Controller
         $url = 'https://inr-bitcoin-bot.herokuapp.com/' . env('TELEGRAM_BOT_TOKEN') . '/webhook';
         $response = $this->telegram->setWebhook(['url' => $url]);
 
-        return $response == true ? redirect()->back() : dd($response);
+        if ($response == true) {
+            return "Webhook setup successfully";
+        }
+
+       dd($response);
     }
 
     public function handleRequest(Request $request)
@@ -99,6 +104,6 @@ class TelegramController extends Controller
 
     public function removeWebHook() {
         $this->telegram->removeWebhook();
-        return redirect()->back();
+        return "Webhook removed successfully";
     }
 }
